@@ -1,0 +1,52 @@
+<detalle-cliente *ngIf="clienteSeleccionado" [cliente]="clienteSeleccionado"></detalle-cliente>
+<div class="card border-primary mb-3">
+    <div class="card-header">Clientes</div>
+    <div class="card-body text-primary">
+        <h5 class="card-title">Lista de Clientes</h5>
+
+        <div class="my-2 text-left">
+            <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounder btn-primary" type="button" [routerLink]="['/clientesForm']" routerLinkActive="router-link-active">Crear Cliente</button>
+        </div>
+
+        <div *ngIf="clientes?.length == 0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+
+        <table class="table table-bordered table-striped" *ngIf="clientes?.length>0">
+            <thead>
+                <tr>
+                    <th *ngIf="authService.hasRole('ROLE_USER')">Foto</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Fecha</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Crear Factura</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Editar</th>
+                    <th *ngIf="authService.hasRole('ROLE_ADMIN')">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cliente of clientes">
+                    <td *ngIf="authService.hasRole('ROLE_USER')">
+                        <img (click)="abrirModal(cliente)" *ngIf="cliente?.foto" src="http://localhost:8080/API/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}" class="img-thumbnail rounded" style="width:64px; cursor: pointer;">
+                        <!--<button type="button" (click)="abrirModal(cliente)" class="btn btn-success btn-sm">{{cliente.id}}</button>-->
+                        <img (click)="abrirModal(cliente)" *ngIf="!cliente?.foto" src="http://localhost:8080/images/not_user.png" alt="Sin Foto" class="img-thumbnail rounded" style="width:64px; cursor: pointer;">
+                    </td>
+                    <td>{{cliente.nombre}}</td>
+                    <td>{{cliente.apellido | uppercase}}</td>
+                    <td>{{cliente.email}}</td>
+                    <td>{{cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>
+                    <td *ngIf="authService.hasRole('ROLE_ADMIN')"><button type="button" [routerLink]="['/facturasForm', cliente.id]" class="btn btn-success btn-sm">Crear</button></td>
+                    <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                        <button type="button" name="Editar" [routerLink]="['/clientesForm', cliente.id]" class="btn btn-primary btn-sm">Editar</button>
+                    </td>
+                    <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                        <button type="button" name="Eliminar" (click)="delete(cliente)" class="btn btn-danger btn-sm">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <paginator-nav *ngIf="paginador" [paginador]="paginador"></paginator-nav>
+
+    </div>
+</div>

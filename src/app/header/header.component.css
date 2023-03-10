@@ -1,0 +1,28 @@
+.head:hover {
+    background-color: rgb(16, 54, 124);
+    color: white;
+    border-radius: 7px;
+    border: 3px solid rgb(16, 54, 124);
+}
+
+.navbar-nav li:hover>ul.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+}
+
+
+/* rotate caret on hover */
+
+.dropdown-menu>li>a:hover:after {
+    text-decoration: underline;
+    transform: rotate(-90deg);
+}
